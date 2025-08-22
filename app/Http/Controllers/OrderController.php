@@ -22,6 +22,26 @@ class OrderController extends BaseCrudController
 
     public function __construct(private OrderService $orderService) {}
 
+    public function index()
+    {
+        try {
+            $orders = $this->model::with('batches.input')
+                ->orderBy('order_date', 'desc')
+                ->get()
+                ->map(function ($order) {
+                    $order->order_total = $order->order_total; // Forzar cálculo si es null
+                    return $order;
+                });
+
+            return response()->json($orders);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'error al obtener las ordenes',
+                'error' => $th->getMessage()
+            ], 500);
+        }
+    }
+    
     public function store(Request $request)
     {
         try {
@@ -51,26 +71,6 @@ class OrderController extends BaseCrudController
                 'message' => 'error al crear la orden de compra',
                 'error' => $th->getMessage()
             ], 422);
-        }
-    }
-
-    public function index()
-    {
-        try {
-            $orders = $this->model::with('batches.input')
-                ->orderBy('order_date', 'desc')
-                ->get()
-                ->map(function ($order) {
-                    $order->order_total = $order->order_total; // Forzar cálculo si es null
-                    return $order;
-                });
-
-            return response()->json($orders);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'message' => 'error al obtener las ordenes',
-                'error' => $th->getMessage()
-            ], 500);
         }
     }
 }

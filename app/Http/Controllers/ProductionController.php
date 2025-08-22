@@ -32,6 +32,39 @@ class ProductionController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        try {
+            $production = Production::with(['productionConsumptions'])->findOrFail($id);
+            return response()->json($production);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'error al obtener el registro',
+                'error' => $th->getMessage()
+            ], 404);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $production = Production::findOrFail($id);
+
+            $this->productionService->revertProduction($production);
+
+            $production->delete();
+
+            return response()->json([
+                'message' => 'Producción eliminada exitosamente y stock restaurado'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al eliminar la producción',
+                'error' => $e->getMessage()
+            ], 400);
+        }
+    }
+    
     public function calculateRequirements(Request $request)
     {
         $validated = $request->validate([
@@ -76,39 +109,6 @@ class ProductionController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error al ejecutar producción',
-                'error' => $e->getMessage()
-            ], 400);
-        }
-    }
-
-    public function show($id)
-    {
-        try {
-            $production = Production::with(['productionConsumptions'])->findOrFail($id);
-            return response()->json($production);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'message' => 'error al obtener el registro',
-                'error' => $th->getMessage()
-            ], 404);
-        }
-    }
-
-    public function destroy($id)
-    {
-        try {
-            $production = Production::findOrFail($id);
-
-            $this->productionService->revertProduction($production);
-
-            $production->delete();
-
-            return response()->json([
-                'message' => 'Producción eliminada exitosamente y stock restaurado'
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error al eliminar la producción',
                 'error' => $e->getMessage()
             ], 400);
         }

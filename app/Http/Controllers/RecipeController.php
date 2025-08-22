@@ -26,6 +26,19 @@ class RecipeController extends BaseCrudController
         ];
     }
 
+    public function show($id)
+    {
+        try {
+            $recipe = $this->model::with(['recipeIngredients'])->findOrFail($id);
+            return response()->json($recipe);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => 'Error al crear la receta',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    
     public function store(Request $request)
     {
         $validated = $this->validationRequest($request);
@@ -39,19 +52,6 @@ class RecipeController extends BaseCrudController
             ], 201);
 
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error al crear la receta',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    public function show($id)
-    {
-        try {
-            $recipe = $this->model::with(['recipeIngredients'])->findOrFail($id);
-            return response()->json($recipe);
-        } catch (\Throwable $e) {
             return response()->json([
                 'message' => 'Error al crear la receta',
                 'error' => $e->getMessage()

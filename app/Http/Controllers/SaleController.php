@@ -23,67 +23,7 @@ class SaleController extends BaseCrudController
         $this->saleService = $saleService;
     }
 
-    /**
-     * Sobrescribir el método store para usar el servicio de ventas
-     */
-    public function store(Request $request)
-    {
-        try {
-            // Validación específica para ventas con productos
-            $validated = $request->validate([
-                'user_id' => 'required|exists:users,id',
-                'products' => 'required|array|min:1',
-                'products.*.product_id' => 'required|exists:product,id',
-                'products.*.quantity_requested' => 'required|numeric|min:0.01'
-            ]);
-
-            $result = $this->saleService->registerSale($validated);
-
-            return response()->json([
-                'success' => true,
-                'message' => $result['message'],
-                'data' => $result['sale']
-            ], 201);
-
-        } catch (\Exception $th) {
-            return response()->json([
-                'success' => false,
-                'error' => 'Error de validación',
-                'messages' => $th->getMessage()
-            ], 422);
-
-        } catch (\Exception $th) {
-            return response()->json([
-                'success' => false,
-                'error' => 'Error al registrar la venta',
-                'message' => $th->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Obtener reporte de stock
-     */
-    public function getStock(Request $request, $productId = null)
-    {
-        try {
-            $stock = $this->saleService->getStockReportSafe($productId);
-
-            return response()->json([
-                'success' => true,
-                'data' => $stock
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'error' => 'Error al obtener stock',
-                'message' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
+        /**
      * Sobrescribir el método index para incluir relaciones
      */
     public function index()
@@ -119,6 +59,44 @@ class SaleController extends BaseCrudController
                 "error" => "Error: Venta no encontrada",
                 "message" => $th->getMessage(),
             ], 404);
+        }
+    }
+    
+    /**
+     * Sobrescribir el método store para usar el servicio de ventas
+     */
+    public function store(Request $request)
+    {
+        try {
+            // Validación específica para ventas con productos
+            $validated = $request->validate([
+                'user_id' => 'required|exists:users,id',
+                'products' => 'required|array|min:1',
+                'products.*.product_id' => 'required|exists:product,id',
+                'products.*.quantity_requested' => 'required|numeric|min:0.01'
+            ]);
+
+            $result = $this->saleService->registerSale($validated);
+
+            return response()->json([
+                'success' => true,
+                'message' => $result['message'],
+                'data' => $result['sale']
+            ], 201);
+
+        } catch (\Exception $th) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Error de validación',
+                'messages' => $th->getMessage()
+            ], 422);
+
+        } catch (\Exception $th) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Error al registrar la venta',
+                'message' => $th->getMessage()
+            ], 500);
         }
     }
 }
