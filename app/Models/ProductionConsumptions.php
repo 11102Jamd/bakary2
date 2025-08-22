@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Production;
 use App\Models\Input;
 use App\Models\InputBatches;
+use App\Models\ProductProduction;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProductionConsumptions extends Model
 {
@@ -34,5 +36,10 @@ class ProductionConsumptions extends Model
     public function batch(): BelongsTo
     {
         return $this->belongsTo(InputBatches::class, 'input_batches_id');
+    }
+
+    public function productProductions(): HasMany
+    {
+        return $this->hasMany(ProductProduction::class, 'production_id');
     }
 }

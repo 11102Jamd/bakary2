@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 
 class RecipeController extends BaseCrudController
 {
+    protected $model = Recipe::class;
+
     protected $recipeService;
 
     public function __construct(RecipeService $recipeService)
@@ -22,11 +24,6 @@ class RecipeController extends BaseCrudController
             'ingredients.*.input_id' => 'required|exists:input,id',
             'ingredients.*.quantity_required' => 'required|numeric|min:0.001'
         ];
-    }
-
-    public function index()
-    {
-        return Recipe::orderBy('id','desc')->get();
     }
 
     public function store(Request $request)
@@ -49,11 +46,10 @@ class RecipeController extends BaseCrudController
         }
     }
 
-    // ... (métodos index, show, update, destroy)
     public function show($id)
     {
         try {
-            $recipe = Recipe::with(['recipeIngredients'])->findOrFail($id);
+            $recipe = $this->model::with(['recipeIngredients'])->findOrFail($id);
             return response()->json($recipe);
         } catch (\Throwable $e) {
             return response()->json([

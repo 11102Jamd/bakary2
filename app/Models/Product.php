@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\ProductProduction;
+use App\Models\SaleProduct;
 
 class Product extends Model
 {
@@ -10,7 +13,16 @@ class Product extends Model
 
     protected  $fillable = [
         'name',
-        'unit_cost',
         'unit_price'
     ];
+
+    public function productProductions(): HasMany
+    {
+        return $this->hasMany(ProductProduction::class, 'product_id');
+    }
+
+    public function saleProducts(): HasMany
+    {
+        return $this->hasMany(SaleProduct::class, 'product_id');
+    }
 }

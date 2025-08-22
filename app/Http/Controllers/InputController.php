@@ -17,9 +17,7 @@ class InputController extends BaseCrudController
     public function index()
     {
         try {
-            $inputs = Input::with(['oldestActiveBatch'])
-                ->orderBy('id', 'desc')
-                ->get();
+            $inputs = $this->model::orderBy('id', 'desc')->get();
 
             return response()->json($inputs);
         } catch (\Throwable $th) {
@@ -29,6 +27,20 @@ class InputController extends BaseCrudController
             ], 500);
         }
     }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $this->validationRules['name'] = 'required|string|unique:input,name,' . $id;
+            parent::update($request, $id);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => 'No se pudo actualizar el insumo',
+                'message' => $th->getMessage()
+            ], 422);
+        }
+    }
+
 
     public function batches($inputId)
     {

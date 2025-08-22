@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('input_id')->constrained('input')->onDelete('cascade');
             $table->foreignId('order_id')->constrained('order')->onDelete('cascade');
-            $table->decimal('quantity_total', 10, 3);
-            $table->decimal('quantity_remaining', 10, 3);
-            $table->decimal('unit_price', 10, 3);
-            $table->decimal('subtotal_price', 10, 3);
-            $table->integer('batch_number');
-            $table->string('original_unit', 30);
-            $table->date('received_date')->useCurrent();
+            $table->decimal('quantity_total', 10, 3); //almacena la cantidad inicial del insumo
+            $table->decimal('quantity_remaining', 10, 3); // lamacena la cantidad del inumo y su conversion a g
+            $table->decimal('unit_price', 10, 3); // almacena el precio unitario del inusmo
+            $table->decimal('subtotal_price', 10, 3); // almacena el susbtotal unit_price * quantity_total
+            $table->integer('batch_number'); // Almacena el numero del lote
+            $table->string('original_unit', 30); // almacena g
+            $table->date('received_date')->useCurrent(); // Almacena la fecha recivida del insumo
             $table->timestamps();
 
             $table->index(['input_id', 'received_date']);

@@ -16,9 +16,9 @@ return new class extends Migration
             $table->foreignId('production_id')->constrained('production')->onDelete('cascade');
             $table->foreignId('input_id')->constrained('input')->onDelete('cascade');
             $table->foreignId('input_batches_id')->constrained('input_batches')->onDelete('cascade');
-            $table->decimal('quantity_used', 10,3);
-            $table->decimal('unit_price');
-            $table->decimal('total_cost', 10,3);
+            $table->decimal('quantity_used', 10,3); // Almacena la cantidad usada en gramos del inusmo
+            $table->decimal('unit_price'); // almacena un precio extraño, se puede eliminar
+            $table->decimal('total_cost', 10,3); // almacena el precio por cantidad gastada
             $table->timestamps();
 
             $table->index(['production_id', 'input_batches_id']);

@@ -20,7 +20,7 @@ class ProductionController extends Controller
     {
         try {
             $productions = Production::with(['recipe', 'consumptions.batch.input'])
-                ->orderBy('production_date', 'desc')
+                ->orderBy('id', 'desc')
                 ->get();
 
             return response()->json($productions);
@@ -91,6 +91,26 @@ class ProductionController extends Controller
                 'message' => 'error al obtener el registro',
                 'error' => $th->getMessage()
             ], 404);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $production = Production::findOrFail($id);
+
+            $this->productionService->revertProduction($production);
+
+            $production->delete();
+
+            return response()->json([
+                'message' => 'Producción eliminada exitosamente y stock restaurado'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al eliminar la producción',
+                'error' => $e->getMessage()
+            ], 400);
         }
     }
 }

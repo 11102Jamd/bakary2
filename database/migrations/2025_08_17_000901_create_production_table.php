@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('production', function (Blueprint $table) {
             $table->id();
             $table->foreignId('recipe_id')->constrained('recipe')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('quantity_to_produce');
-            $table->decimal('price_for_product', 10, 3);
-            $table->decimal('total_cost', 10, 3);
-            $table->date('production_date');
+            $table->integer('quantity_to_produce'); // Almacena la cantidad de producto a fabricar
+            $table->decimal('price_for_product', 10, 3); // almacena el precio individual de cada profucto fabricado
+            $table->decimal('total_cost', 10, 3); // Almacena el total de la produccion
+            $table->date('production_date'); // almacena la fecha de la produccion
             $table->timestamps();
         });
     }

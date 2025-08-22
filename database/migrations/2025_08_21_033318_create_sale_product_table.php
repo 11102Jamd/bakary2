@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order', function (Blueprint $table) {
+        Schema::create('sale_product', function (Blueprint $table) {
             $table->id();
-            $table->string('supplier_name');//almacena el nombre del proveedor
-            $table->date('order_date');//alamacenar la fecha de la compra
-            $table->decimal('order_total');//almacena el total de la compra
+            $table->foreignId('sale_id')->constrained('sale')->onDelete('cascade');
+            $table->foreignId('product_id')->constrained('product')->onDelete('cascade');
+            $table->decimal('quantity_requested', 10, 3);
+            $table->decimal('subtotal_price', 10, 3);
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('order');
+        Schema::dropIfExists('sale_product');
     }
 };

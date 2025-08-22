@@ -45,7 +45,7 @@ class ProductionService
             // Actualizar con el costo total calculado
             $production->update([
                 'total_cost' => round($totalCost, 3),
-                'price_for_product' => round(($totalCost / $quantityToProduce) * 1000, 3)
+                'price_for_product' => round($totalCost / $quantityToProduce, 3)
             ]);
 
             return $production->load('consumptions.batch.input');
@@ -189,5 +189,28 @@ class ProductionService
             'total_estimated_cost' => round($totalCost, 3),
             'cost_per_unit' => round($quantityToProduce > 0 ? $totalCost / $quantityToProduce : 0, 3)
         ];
+    }
+
+
+    public function revertProduction(Production $production)
+    {
+        return DB::transaction(function () use ($production) {
+            $consumptions = ProductionConsumptions::with('batch')
+                ->where('production_id', $production->id)
+                ->get();
+
+            foreach ($consumptions as $consumption) {
+                $this->revertConsumption($consumption);
+            }
+            return true;
+        });
+    }
+
+    protected function revertConsumption(ProductionConsumptions $consumption)
+    {
+        $batch = InputBatches::findOrFail($consumption->input_batches_id);
+        $batch->increment('quantity_remaining', $consumption->quantity_used);
+        $consumption->delete();
+        return true;
     }
 }

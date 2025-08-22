@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Recipe;
 use App\Models\ProductionConsumptions;
 use App\Models\Input;
+use App\Models\ProductProduction;
 
 class Production extends Model
 {
@@ -41,5 +42,10 @@ class Production extends Model
             'id',                    // PK en el modelo actual (Production)
             'input_id'               // FK en la tabla intermedia que apunta a Input
         );
+    }
+
+    public function productProduction(): HasMany
+    {
+        return $this->hasMany(ProductProduction::class, 'production_id');
     }
 }

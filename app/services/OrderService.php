@@ -9,29 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
-    public function createOrderWithBatches(array $orderData): Order
-    {
-        return DB::transaction(function () use ($orderData) {
-            // Calcular total de la orden
-            $orderTotal = collect($orderData['items'])->sum(function ($item) {
-                return round($item['quantity_total'] * $item['unit_price'], 3);
-            });
-
-            // Crear la orden principal con el total
-            $order = Order::create([
-                'supplier_name' => $orderData['supplier_name'],
-                'order_date' => $orderData['order_date'],
-                'order_total' => $orderTotal
-            ]);
-
-            // Procesar cada item del pedido
-            foreach ($orderData['items'] as $item) {
-                $this->createInputBatch($order->id, $item);
-            }
-
-            return $order->load('batches.input');
-        });
-    }
 
     protected function createInputBatch(int $orderId, array $itemData): InputBatches
     {
@@ -69,5 +46,29 @@ class OrderService
             'un' => $quantity * 1,
             default => $quantity
         };
+    }
+
+    public function createOrderWithBatches(array $orderData): Order
+    {
+        return DB::transaction(function () use ($orderData) {
+            // Calcular total de la orden
+            $orderTotal = collect($orderData['items'])->sum(function ($item) {
+                return round($item['quantity_total'] * $item['unit_price'], 3);
+            });
+
+            // Crear la orden principal con el total
+            $order = Order::create([
+                'supplier_name' => $orderData['supplier_name'],
+                'order_date' => $orderData['order_date'],
+                'order_total' => $orderTotal
+            ]);
+
+            // Procesar cada item del pedido
+            foreach ($orderData['items'] as $item) {
+                $this->createInputBatch($order->id, $item);
+            }
+
+            return $order->load('batches.input');
+        });
     }
 }

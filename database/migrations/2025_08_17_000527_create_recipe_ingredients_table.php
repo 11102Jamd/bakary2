@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('recipe_id')->constrained('recipe')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('input_id')->constrained('input')->onDelete('cascade')->onUpdate('cascade');
-            $table->decimal('quantity_required', 10,3);
+            $table->decimal('quantity_required', 10,3); // Almacena la cantidad requierida en greamos de cada insumo
             $table->timestamps();
         });
     }
