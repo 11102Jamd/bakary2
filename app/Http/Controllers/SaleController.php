@@ -14,7 +14,7 @@ class SaleController extends BaseCrudController
 
     protected $validationRules = [
         'user_id' => 'required|exists:users,id',
-        'sale_date' => 'nullable|date',
+        'sale_date' => 'required|date',
         'sale_total' => 'nullable|numeric|min:0'
     ];
 
@@ -61,7 +61,7 @@ class SaleController extends BaseCrudController
             ], 404);
         }
     }
-    
+
     /**
      * Sobrescribir el método store para usar el servicio de ventas
      */

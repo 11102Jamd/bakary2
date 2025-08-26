@@ -11,6 +11,9 @@ use Illuminate\Http\Request;
 class OrderController extends BaseCrudController
 {
     protected $model = Order::class;
+
+    protected $orderService;
+
     protected $validationRules = [
         'supplier_name' => 'required|string|max:255',
         'order_date' => 'required|date',
@@ -20,7 +23,10 @@ class OrderController extends BaseCrudController
         'items.*.unit_price' => 'required|numeric|min:0.01'
     ];
 
-    public function __construct(private OrderService $orderService) {}
+    public function __construct(OrderService $orderService)
+    {
+        $this->orderService = $orderService;
+    }
 
     public function index()
     {
@@ -41,7 +47,21 @@ class OrderController extends BaseCrudController
             ], 500);
         }
     }
-    
+
+
+    public function show($id)
+    {
+        try {
+            $order = $this->model::with('batches.input')->findOrFail($id);
+            return response()->json($order);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => 'orden de compra no encontrada',
+                'message' => $th->getMessage()
+            ], 404);
+        }
+    }
+
     public function store(Request $request)
     {
         try {
@@ -54,7 +74,7 @@ class OrderController extends BaseCrudController
                     throw new \Exception("El insumo con ID {$item['input_id']} no existe");
                 }
 
-                if (!in_array(strtolower($input->unit), ['kg', 'g', 'lb','l', 'oz'])) {
+                if (!in_array(strtolower($input->unit), ['kg', 'g', 'lb', 'l', 'oz'])) {
                     throw new \Exception("Unidad no válida para el insumo: {$input->unit}. Use: kg, g, l, lb, oz");
                 }
             }

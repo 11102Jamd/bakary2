@@ -11,6 +11,7 @@ use Illuminate\Support\Js;
 class ProductController extends BaseCrudController
 {
     protected $model = Product::class;
+
     protected $productProductionService;
 
     protected $validationRules = [
@@ -26,11 +27,9 @@ class ProductController extends BaseCrudController
     public function index()
     {
         try {
-            $product = $this->model::with(['productProductions' => function ($query) {
-                $query->orderBy('id', 'desc')->take(1);
-            }, 'productProductions.production'])
+            $product = $this->model::with(['latestProduction.production'])
                 ->orderBy('id', 'desc')
-                ->first();
+                ->get();
 
             return response()->json($product);
         } catch (\Throwable $th) {

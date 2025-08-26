@@ -25,4 +25,9 @@ class Product extends Model
     {
         return $this->hasMany(SaleProduct::class, 'product_id');
     }
+
+    public function latestProduction()
+    {
+        return $this->hasOne(ProductProduction::class)->latestOfMany();
+    }
 }

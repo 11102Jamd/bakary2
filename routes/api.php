@@ -79,7 +79,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     // Rutas comunes para todos los autenticados
-    Route::apiResource('products', ProductController::class)->only(['index', 'show']);
+    Route::apiResource('product', ProductController::class)->only(['index', 'show']);
 });
 
 // Route::apiResource('order', OrderController::class);

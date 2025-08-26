@@ -60,7 +60,7 @@ class OrderService
             $order = Order::create([
                 'supplier_name' => $orderData['supplier_name'],
                 'order_date' => $orderData['order_date'],
-                'order_total' => $orderTotal
+                'order_total' => round($orderTotal, 3)
             ]);
 
             // Procesar cada item del pedido

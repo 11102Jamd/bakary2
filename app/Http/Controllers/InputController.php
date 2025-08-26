@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 class InputController extends BaseCrudController
 {
     protected $model = Input::class;
+
     protected $validationRules = [
         'name' => 'required|string|max:255|unique:input,name',
         'unit' => 'required|string|max:20'
@@ -32,7 +33,7 @@ class InputController extends BaseCrudController
     {
         try {
             $this->validationRules['name'] = 'required|string|unique:input,name,' . $id;
-            parent::update($request, $id);
+            return parent::update($request, $id); // ← AGREGA 'return' AQUÍ
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => 'No se pudo actualizar el insumo',

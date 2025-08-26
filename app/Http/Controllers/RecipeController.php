@@ -12,18 +12,18 @@ class RecipeController extends BaseCrudController
     protected $model = Recipe::class;
 
     protected $recipeService;
+    protected $validationRules = [
+        'name' => 'required|string|max:255|unique:recipe,name',
+        'yield_quantity' => 'required|numeric|min:0.001',
+        'unit' => 'required|string|max:20',
+        'ingredients' => 'required|array|min:1',
+        'ingredients.*.input_id' => 'required|exists:input,id',
+        'ingredients.*.quantity_required' => 'required|numeric|min:0.001'
+    ];
 
     public function __construct(RecipeService $recipeService)
     {
         $this->recipeService = $recipeService;
-        $this->validationRules = [
-            'name' => 'required|string|max:255|unique:recipe,name',
-            'yield_quantity' => 'required|numeric|min:0.001',
-            'unit' => 'required|string|max:20',
-            'ingredients' => 'required|array|min:1',
-            'ingredients.*.input_id' => 'required|exists:input,id',
-            'ingredients.*.quantity_required' => 'required|numeric|min:0.001'
-        ];
     }
 
     public function show($id)
@@ -38,7 +38,7 @@ class RecipeController extends BaseCrudController
             ], 500);
         }
     }
-    
+
     public function store(Request $request)
     {
         $validated = $this->validationRequest($request);
@@ -50,7 +50,6 @@ class RecipeController extends BaseCrudController
                 'message' => 'Receta base creada exitosamente',
                 'data' => $recipe->load('recipeIngredients.input')
             ], 201);
-
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error al crear la receta',
