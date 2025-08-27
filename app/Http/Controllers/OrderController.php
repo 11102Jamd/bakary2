@@ -84,7 +84,7 @@ class OrderController extends BaseCrudController
             return response()->json([
                 'message' => 'Orden creada exitosamente',
                 'data' => $order,
-                'order_total' => $order->order_total
+                'order_total' => round($order->order_total, 3)
             ], 201);
         } catch (\Throwable $th) {
             return response()->json([

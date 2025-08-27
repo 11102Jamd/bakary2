@@ -25,7 +25,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
      * Rutas especificas para el usuario Administrador
      */
     Route::middleware(['is_admin'])->group(function () {
-        Route::apiResource('order', OrderController::class)->except(['destroy']);
+        Route::apiResource('order', OrderController::class);
         Route::apiResource('input', InputController::class);
         Route::get('input/{input}/batches', [InputController::class, 'batches']);
         Route::apiResource('recipe', RecipeController::class);
