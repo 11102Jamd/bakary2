@@ -40,6 +40,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
             // Pre-calcular requerimientos (POST) - No afecta la base de datos
             Route::post('/calculate-requirements', [ProductionController::class, 'calculateRequirements']);
 
+            // Obtener el detalle de Una produccion
+            Route::get('/{id}', [ProductionController::class, 'show']);
+
             // Ejecutar producción (POST) - Realiza cambios en la base de datos
             Route::post('/', [ProductionController::class, 'executeProduction']);
 

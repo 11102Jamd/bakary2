@@ -35,7 +35,7 @@ class ProductionController extends Controller
     public function show($id)
     {
         try {
-            $production = Production::with(['productionConsumptions'])->findOrFail($id);
+            $production = Production::with(['consumptions.input', 'consumptions.batch'])->findOrFail($id);
             return response()->json($production);
         } catch (\Throwable $th) {
             return response()->json([
@@ -64,7 +64,7 @@ class ProductionController extends Controller
             ], 400);
         }
     }
-    
+
     public function calculateRequirements(Request $request)
     {
         $validated = $request->validate([

@@ -29,7 +29,7 @@ class RecipeController extends BaseCrudController
     public function show($id)
     {
         try {
-            $recipe = $this->model::with(['recipeIngredients'])->findOrFail($id);
+            $recipe = $this->model::with(['recipeIngredients.input'])->findOrFail($id);
             return response()->json($recipe);
         } catch (\Throwable $e) {
             return response()->json([
