@@ -35,7 +35,7 @@ class ProductionController extends Controller
     public function show($id)
     {
         try {
-            $production = Production::with(['consumptions.input', 'consumptions.batch'])->findOrFail($id);
+            $production = Production::with(['consumptions.input', 'consumptions.batch', 'recipe'])->findOrFail($id);
             return response()->json($production);
         } catch (\Throwable $th) {
             return response()->json([
