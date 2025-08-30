@@ -27,7 +27,7 @@ class ProductController extends BaseCrudController
     public function index()
     {
         try {
-            $product = $this->model::with(['latestProduction.production'])
+            $product = $this->model::with(['productProductions','productProductions.production'])
                 ->orderBy('id', 'desc')
                 ->get();
 

@@ -49,7 +49,7 @@ class ProductProductionService
         }
 
         $profit = $sellingPrice - $productionCost;
-        $marginPercentage = ($profit / $productionCost) * 100;
+        $marginPercentage = ($profit / $sellingPrice) * 100;
 
         return round($marginPercentage, 3);
     }
