@@ -57,4 +57,29 @@ class RecipeController extends BaseCrudController
             ], 500);
         }
     }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $recipe = $this->model::findOrFail($id);
+
+            $this->validationRules['name'] = 'required|string|max:255|unique:recipe,name,' . $id;
+
+            $this->validationRules['ingredients'] = 'sometimes|array|min:1';
+
+            $validated = $this->validationRequest($request, $this->validationRules);
+
+            $updatedRecipe = $this->recipeService->updateRecipe($recipe, $validated);
+
+            return response()->json([
+                'message' => 'Receta actualizada exitosamente',
+                'data' => $updatedRecipe->load('recipeIngredients.input')
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Error de validación',
+                'message' => $e->getMessage()
+            ], 422);
+        }
+    }
 }
