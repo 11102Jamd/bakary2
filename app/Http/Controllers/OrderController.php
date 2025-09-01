@@ -74,8 +74,8 @@ class OrderController extends BaseCrudController
                     throw new \Exception("El insumo con ID {$item['input_id']} no existe");
                 }
 
-                if (!in_array(strtolower($input->unit), ['kg', 'g', 'lb', 'l', 'oz'])) {
-                    throw new \Exception("Unidad no válida para el insumo: {$input->unit}. Use: kg, g, l, lb, oz");
+                if (!in_array(strtolower($input->unit), ['kg', 'g', 'lb', 'l', 'oz', 'un'])) {
+                    throw new \Exception("Unidad no válida para el insumo: {$input->unit}. Use: kg, g, l, lb, oz, un");
                 }
             }
 

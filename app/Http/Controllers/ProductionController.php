@@ -67,12 +67,13 @@ class ProductionController extends Controller
 
     public function calculateRequirements(Request $request)
     {
-        $validated = $request->validate([
-            'recipe_id' => 'required|exists:recipe,id',
-            'quantity_to_produce' => 'required|numeric|min:0.001'
-        ]);
 
         try {
+            $validated = $request->validate([
+                'recipe_id' => 'required|exists:recipe,id',
+                'quantity_to_produce' => 'required|numeric|min:0.001'
+            ]);
+
             $result = $this->productionService->calculateRequirements(
                 $validated['recipe_id'],
                 $validated['quantity_to_produce']
@@ -89,12 +90,14 @@ class ProductionController extends Controller
 
     public function executeProduction(Request $request)
     {
-        $validated = $request->validate([
-            'recipe_id' => 'required|exists:recipe,id',
-            'quantity_to_produce' => 'required|numeric|min:0.001'
-        ]);
 
         try {
+
+            $validated = $request->validate([
+                'recipe_id' => 'required|exists:recipe,id',
+                'quantity_to_produce' => 'required|numeric|min:0.001'
+            ]);
+
             $production = $this->productionService->executeProduction(
                 $validated['recipe_id'],
                 $validated['quantity_to_produce']

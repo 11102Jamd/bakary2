@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\crud\BaseCrudController;
+use App\Models\ProductProduction;
 use App\Models\Sale;
 use App\Services\SaleService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SaleController extends BaseCrudController
 {
@@ -23,7 +25,7 @@ class SaleController extends BaseCrudController
         $this->saleService = $saleService;
     }
 
-        /**
+    /**
      * Sobrescribir el método index para incluir relaciones
      */
     public function index()
@@ -34,7 +36,6 @@ class SaleController extends BaseCrudController
                 ->get();
 
             return response()->json($sales);
-
         } catch (\Throwable $th) {
             return response()->json([
                 "error" => "Error al obtener las ventas",
@@ -53,7 +54,6 @@ class SaleController extends BaseCrudController
                 ->findOrFail($id);
 
             return response()->json($sale);
-
         } catch (\Throwable $th) {
             return response()->json([
                 "error" => "Error: Venta no encontrada",
@@ -83,19 +83,42 @@ class SaleController extends BaseCrudController
                 'message' => $result['message'],
                 'data' => $result['sale']
             ], 201);
-
         } catch (\Exception $th) {
             return response()->json([
                 'success' => false,
                 'error' => 'Error de validación',
                 'messages' => $th->getMessage()
             ], 422);
-
         } catch (\Exception $th) {
             return response()->json([
                 'success' => false,
                 'error' => 'Error al registrar la venta',
                 'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            // Buscar la venta
+            $sale = Sale::findOrFail($id);
+
+            // Revertir la venta (restaurar stock)
+            $this->saleService->revertSale($sale);
+
+            // Eliminar la venta
+            $sale->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Venta eliminada exitosamente y stock restaurado'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Error al eliminar la venta',
+                'message' => $e->getMessage()
             ], 500);
         }
     }

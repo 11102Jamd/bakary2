@@ -55,7 +55,7 @@ class SaleService
                 }
 
                 // 7. Actualizar el total de la venta
-                $sale->update(['sale_total' => $totalSale]);
+                $sale->update(['sale_total' => round($totalSale, 3)]);
 
                 return [
                     'sale' => $sale->load(['saleProducts.product', 'user']),
@@ -130,5 +130,55 @@ class SaleService
                 'unit_price' => $product->unit_price
             ];
         });
+    }
+
+    public function revertSale(Sale $sale)
+    {
+        return DB::transaction(function () use ($sale) {
+            try {
+                // Cargar los productos de la venta
+                $sale->load('saleProducts');
+
+                foreach ($sale->saleProducts as $saleProduct) {
+                    $this->revertSaleProduct($saleProduct);
+                }
+
+                return true;
+
+            } catch (\Exception $e) {
+                Log::error('Error al revertir venta: ' . $e->getMessage());
+                throw new \Exception('Error al revertir la venta: ' . $e->getMessage());
+            }
+        });
+    }
+
+    /**
+     * Revertir un producto de venta al stock de producción
+     */
+    protected function revertSaleProduct($saleProduct)
+    {
+        // Buscar producciones existentes del mismo producto (FIFO: más antiguas primero)
+        $productions = ProductProduction::where('product_id', $saleProduct->product_id)
+            ->orderBy('created_at', 'asc') // Más antiguas primero
+            ->get();
+
+        $quantityToRestore = $saleProduct->quantity_requested;
+
+        foreach ($productions as $production) {
+            if ($quantityToRestore <= 0) break;
+
+            // Restaurar el stock a esta producción
+            $production->quantity_produced += $quantityToRestore;
+            $production->save();
+
+            $quantityToRestore = 0; // Todo restaurado
+        }
+
+        // Si por alguna razón queda cantidad por restaurar, manejarlo
+        if ($quantityToRestore > 0) {
+            Log::warning("No se pudo restaurar completamente el producto {$saleProduct->product_id}. Quedan: {$quantityToRestore} unidades");
+        }
+
+        return true;
     }
 }

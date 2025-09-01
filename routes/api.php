@@ -32,7 +32,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::apiResource('product', ProductController::class);
         Route::post('/products/link-production', [ProductController::class, 'linkProductionToProduct']);
         Route::apiResource('user', UserController::class);
-        Route::apiResource('sale', SaleController::class)->except(['destroy']);
+        Route::apiResource('sale', SaleController::class);
         Route::prefix('production')->group(function () {
             // Obtener historial de producciones (GET)
             Route::get('/', [ProductionController::class, 'index']);
