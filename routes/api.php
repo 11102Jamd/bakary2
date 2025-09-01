@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\InputController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderPdfController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\SaleController;
@@ -85,6 +86,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('product', ProductController::class)->only(['index', 'show']);
 });
 
+
+Route::post('/order/exportPdf', [OrderPdfController::class, 'exportPdf']);
 // Route::apiResource('order', OrderController::class);
 // Route::apiResource('input', InputController::class);
 // Route::get('inputs/{input}/batches', [InputController::class, 'batches']);

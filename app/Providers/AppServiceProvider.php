@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Services\OrderService;
+use App\services\PdfService;
 use App\Services\ProductionService;
 use App\Services\ProductProductionService;
 use App\Services\RecipeService;
+use App\Services\SaleService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProductProductionService::class, function ($app) {
             return new ProductProductionService();
         });
-        
+
         $this->app->bind(ProductionService::class, function ($app) {
             return new ProductionService();
         });
@@ -27,6 +29,12 @@ class AppServiceProvider extends ServiceProvider
         });
         $this->app->bind(OrderService::class, function ($app) {
             return new OrderService();
+        });
+        $this->app->bind(SaleService::class, function ($app) {
+            return new SaleService();
+        });
+        $this->app->bind(PdfService::class, function ($app) {
+            return new PdfService();
         });
     }
 
