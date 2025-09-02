@@ -106,7 +106,7 @@
                     <td>{{ $batch->quantity_total }} {{ $batch->input->unit }}</td>
                     <td>${{ number_format($batch->unit_price, 2) }}</td>
                     <td>${{ number_format($batch->subtotal_price, 2) }}</td>
-                    <td>{{ $batch->batch_code ?? 'N/A' }}</td>
+                    <td>{{ $batch->batch_number ?? 'N/A' }}</td>
                 </tr>
             @endforeach
 
