@@ -6,8 +6,10 @@ use App\Http\Controllers\InputController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderPdfController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductionPdfController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SalePdfController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -87,7 +89,27 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 
-Route::post('/order/exportPdf', [OrderPdfController::class, 'exportPdf']);
+Route::post('/order/export-pdf', [OrderPdfController::class, 'exportPdf']);
+Route::post('/production/export-pdf', [ProductionPdfController::class, 'exportPdf']);
+Route::post('/sale/export-pdf', [SalePdfController::class, 'exportPdf']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Route::apiResource('order', OrderController::class);
 // Route::apiResource('input', InputController::class);
 // Route::get('inputs/{input}/batches', [InputController::class, 'batches']);

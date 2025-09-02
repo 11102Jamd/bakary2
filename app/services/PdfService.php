@@ -14,7 +14,8 @@ class PdfService
 
         // Permite cargar recursos externos
         $options->set('isRemoteEnabled', true);
-
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isPhpEnabled', true);
         // Define la fuente por defecto
         $options->set('defaultFont', 'Arial');
 
@@ -33,5 +34,4 @@ class PdfService
         // Devuelve el objeto creado a partir de la instancia
         return $dompdf;
     }
-
 }

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
+use App\Models\Production;
 use App\services\PdfService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class OrderPdfController extends Controller
+class ProductionPdfController extends Controller
 {
     protected $pdfService;
 
@@ -19,9 +19,8 @@ class OrderPdfController extends Controller
 
     public function exportPdf(Request $request)
     {
-        set_time_limit(300); // 5 minutos máximo
-
         try {
+
             $request->validate([
                 'start_date' => 'required|date',
                 'end_date' => 'required|date|after_or_equal:start_date'
@@ -30,36 +29,41 @@ class OrderPdfController extends Controller
             $startDate = Carbon::parse($request->start_date)->startOfDay();
             $endDate = Carbon::parse($request->end_date)->endOfDay();
 
-            // Consulta optimizada
-            $orders = Order::with(['batches.input'])
-                ->whereBetween('order_date', [$startDate, $endDate])
-                ->orderBy('order_date', 'asc')
+            $productions = Production::with(['consumptions.batch.input','productProduction.product','recipe'])
+                ->whereBetween('production_date', [$startDate, $endDate])
+                ->orderBy('production_date', 'asc')
                 ->get();
 
-            if ($orders->isEmpty()) {
+            if ($productions->isEmpty()) {
                 return response()->json([
-                    'error' => 'No hay compras en el rango de fechas establecido'
+                    'error' => 'No hay producciones en el rango de fechas establecido'
                 ], 404);
             }
 
-            $totalOrders = $orders->sum('order_total');
+            $totalProductions = $productions->sum('total_cost');
 
             $data = [
-                'orders' => $orders,
-                'totalOrders' => $totalOrders,
+                'productions' => $productions,
+                'totalProductions' => $totalProductions,
                 'startDate' => $startDate->format('d/m/Y'),
                 'endDate' => $endDate->format('d/m/Y'),
                 'generateAt' => now()->format('d/m/Y')
             ];
 
-            $pdf = $this->pdfService->generatePdf('pdf.orders', $data);
+            $pdf = $this->pdfService->generatePdf('pdf.productions', $data);
 
             return response($pdf->output(), 200)
                 ->header('Content-Type', 'application/pdf')
-                ->header('Content-Disposition', 'attachment; filename="reporte-compras.pdf"');
+                ->header('Content-Disposition', 'attachment; filename="reporte-productions.pdf"')
+                ->header('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
+                ->header('Pragma', 'no-cache')
+                ->header('Expires', '0');
+
         } catch (\Throwable $th) {
             Log::error('Error al generar PDF:', [
                 'message' => $th->getMessage(),
+                'file' => $th->getFile(),
+                'line' => $th->getLine(),
                 'trace' => $th->getTraceAsString(),
             ]);
 
