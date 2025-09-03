@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->decimal('unit_price', 10,3);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -64,4 +64,46 @@ class InputController extends BaseCrudController
             ], 500);
         }
     }
+
+    public function disable($id)
+    {
+        try {
+            $input = $this->model::findOrFail($id);
+            $input->delete();
+            return response()->json([
+                'message' => 'insumo inhabilitado correctamente',
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => 'error no sep udo encontrar el insumo con ese registro',
+                'message' => $th->getMessage()
+            ], 404);
+        }
+    }
+
+
+    public function enable($id)
+    {
+        try {
+            $input = $this->model::withTrashed()->findOrFail($id);
+
+            if ($input->trashed()) {
+                $input->restore();
+                return response()->json([
+                    'message' => 'insumo reactivado correctamente',
+                    'input_id' => $id
+                ], 200);
+            }
+
+            return response()->json([
+                'message' => 'El insumo ya estaba activo',
+                'input_id' => $id
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => 'No se pudo reactivar el insumo',
+                'message' => $th->getMessage()
+            ], 404);
+        }
+    }
 }

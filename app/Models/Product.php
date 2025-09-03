@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\ProductProduction;
 use App\Models\SaleProduct;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'product';
 
     protected  $fillable = [
@@ -16,6 +19,8 @@ class Product extends Model
         'unit_price'
     ];
 
+    protected $dates = ['deleted_at'];
+    
     public function productProductions(): HasMany
     {
         return $this->hasMany(ProductProduction::class, 'product_id');

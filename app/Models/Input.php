@@ -6,15 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\InputBatches;
 use App\Models\ProductionConsumptions;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Input extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'input';
 
     protected $fillable = [
         'name',
         'unit'
     ];
+
+    protected $dates = ['deleted_at'];
 
     protected static function booted()
     {

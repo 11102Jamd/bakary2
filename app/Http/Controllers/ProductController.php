@@ -27,7 +27,7 @@ class ProductController extends BaseCrudController
     public function index()
     {
         try {
-            $product = $this->model::with(['productProductions','productProductions.production'])
+            $product = $this->model::with(['productProductions', 'productProductions.production'])
                 ->orderBy('id', 'desc')
                 ->get();
 
@@ -75,6 +75,48 @@ class ProductController extends BaseCrudController
                 'error' => 'Error al vincular producción con producto',
                 'message' => $th->getMessage()
             ], 500);
+        }
+    }
+
+    public function disable($id)
+    {
+        try {
+            $product = $this->model::findOrFail($id);
+            $product->delete();
+            return response()->json([
+                'message' => 'producto inhabilitado exitosamente',
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => 'error no se pudo encontrar el producto',
+                'message' => $th->getMessage()
+            ], 404);
+        }
+    }
+
+
+    public function enable($id)
+    {
+        try {
+            $product = $this->model::withTrashed()->findOrFail($id);
+
+            if ($product->trashed()) {
+                $product->restore();
+                return response()->json([
+                    'message' => 'producto reactivado correctamente',
+                    'producto_id' => $id
+                ], 200);
+            }
+
+            return response()->json([
+                'message' => 'El producto ya estaba activo',
+                'producto_id' => $id
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => 'No se pudo reactivar el insumo',
+                'message' => $th->getMessage()
+            ], 404);
         }
     }
 }

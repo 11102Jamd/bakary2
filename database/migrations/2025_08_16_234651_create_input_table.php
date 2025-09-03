@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 30);//amacena el nombre del insumo
             $table->string('unit', 30);// almacena la unidad en la que se reg
+            $table->softDeletes();
             $table->timestamps();
         });
     }

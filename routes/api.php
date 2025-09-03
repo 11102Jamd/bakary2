@@ -43,9 +43,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::middleware(['is_admin'])->group(function () {
         Route::apiResource('order', OrderController::class);
         Route::apiResource('input', InputController::class);
+        Route::patch('input/{id}/disable', [InputController::class, 'disable']);
+        Route::patch('input/{id}/enable', [InputController::class, 'enable']);
         Route::get('input/{input}/batches', [InputController::class, 'batches']);
         Route::apiResource('recipe', RecipeController::class);
         Route::apiResource('product', ProductController::class);
+        Route::patch('product/{id}/disable', [ProductController::class, 'disable']);
+        Route::patch('product/{id}/enable', [ProductController::class, 'enable']);
         Route::post('/products/link-production', [ProductController::class, 'linkProductionToProduct']);
         Route::apiResource('user', UserController::class);
         Route::patch('user/{id}/disable', [UserController::class, 'disable']);
