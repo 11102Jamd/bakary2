@@ -32,7 +32,7 @@ class OrderController extends BaseCrudController
     {
         try {
             $orders = $this->model::with('batches.input')
-                ->orderBy('order_date', 'desc')
+                ->orderBy('id', 'desc')
                 ->get()
                 ->map(function ($order) {
                     $order->order_total = $order->order_total; // Forzar cálculo si es null
