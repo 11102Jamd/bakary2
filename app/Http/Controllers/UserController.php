@@ -44,4 +44,47 @@ class UserController extends BaseCrudController
         $this->validationRules['email'] = 'required|email|unique:users,email,' . $id;
         return parent::update($request, $id);
     }
+
+
+    public function disable($id)
+    {
+        try {
+            $user = $this->model::findOrFail($id);
+            $user->delete();
+            return response()->json([
+                'message' => 'usuario inhabilitado temporalmete',
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => 'error no sep udo encontrar el usuario con ese registro',
+                'message' => $th->getMessage()
+            ], 404);
+        }
+    }
+
+
+    public function enable($id)
+    {
+        try {
+            $user = $this->model::withTrashed()->findOrFail($id);
+
+            if ($user->trashed()) {
+                $user->restore();
+                return response()->json([
+                    'message' => 'Usuario reactivado correctamente',
+                    'user_id' => $id
+                ], 200);
+            }
+
+            return response()->json([
+                'message' => 'El usuario ya estaba activo',
+                'user_id' => $id
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => 'No se pudo reactivar el usuario',
+                'message' => $th->getMessage()
+            ], 404);
+        }
+    }
 }

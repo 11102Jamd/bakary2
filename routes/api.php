@@ -48,6 +48,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::apiResource('product', ProductController::class);
         Route::post('/products/link-production', [ProductController::class, 'linkProductionToProduct']);
         Route::apiResource('user', UserController::class);
+        Route::patch('user/{id}/disable', [UserController::class, 'disable']);
+        Route::patch('user/{id}/enable', [UserController::class, 'enable']);
         Route::apiResource('sale', SaleController::class);
 
         Route::prefix('production')->group(function () {
@@ -89,7 +91,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::apiResource('product', ProductController::class)->only(['index', 'show']);
 });
-
 
 Route::post('/order/export-pdf', [OrderPdfController::class, 'exportPdf']);
 Route::post('/production/export-pdf', [ProductionPdfController::class, 'exportPdf']);
