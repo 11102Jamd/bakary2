@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\InputController;
 use App\Http\Controllers\OrderController;
@@ -23,6 +24,18 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+    /**
+     * Rutas basicas para el Dashboard
+     */
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/stats', [DashboardController::class, 'getDashboardStats']);
+        Route::get('/sales-data', [DashboardController::class, 'getSalesData']);
+        Route::get('/orders-data', [DashboardController::class, 'getOrdersData']);
+        Route::get('/user-stats', [DashboardController::class, 'getUserStats']);
+        Route::get('/top-products', [DashboardController::class, 'getTopProducts']);
+        Route::get('/production-stats', [DashboardController::class, 'getProductionStats']);
+        Route::get('/inventory-value', [DashboardController::class, 'getInventoryValue']);
+    });
 
     /**
      * Rutas especificas para el usuario Administrador
@@ -36,19 +49,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/products/link-production', [ProductController::class, 'linkProductionToProduct']);
         Route::apiResource('user', UserController::class);
         Route::apiResource('sale', SaleController::class);
+
         Route::prefix('production')->group(function () {
-            // Obtener historial de producciones (GET)
             Route::get('/', [ProductionController::class, 'index']);
 
             // Pre-calcular requerimientos (POST) - No afecta la base de datos
             Route::post('/calculate-requirements', [ProductionController::class, 'calculateRequirements']);
-
-            // Obtener el detalle de Una produccion
             Route::get('/{id}', [ProductionController::class, 'show']);
-
-            // Ejecutar producción (POST) - Realiza cambios en la base de datos
             Route::post('/', [ProductionController::class, 'executeProduction']);
-
             Route::delete('/{id}', [ProductionController::class, 'destroy']);
         });
     });
@@ -71,20 +79,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::apiResource('input', InputController::class)->only(['index', 'show', 'store', 'update']);
         Route::apiResource('recipe', RecipeController::class)->only(['index', 'show', 'store', 'update']);
         Route::prefix('production')->group(function () {
-            // Obtener historial de producciones (GET)
             Route::get('/', [ProductionController::class, 'index']);
-
             // Pre-calcular requerimientos (POST) - No afecta la base de datos
             Route::post('/calculate-requirements', [ProductionController::class, 'calculateRequirements']);
-
-            // Ejecutar producción (POST) - Realiza cambios en la base de datos
             Route::post('/', [ProductionController::class, 'executeProduction']);
-
             Route::delete('/{id}', [ProductionController::class, 'destroy']);
         });
     });
 
-    // Rutas comunes para todos los autenticados
     Route::apiResource('product', ProductController::class)->only(['index', 'show']);
 });
 
