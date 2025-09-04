@@ -13,13 +13,18 @@ class OrderService
     protected function createInputBatch(int $orderId, array $itemData): InputBatches
     {
         $input = Input::findOrFail($itemData['input_id']);
-        $quantityInGrams = $this->convertToGrams($itemData['quantity_total'], $input->unit);
+        $originalUnit = $itemData['unit'];
+        $originalQuantity = $itemData['quantity_total'];
+
+        $converionResult = $this->convertToStandardUnit($originalQuantity, $originalUnit);
 
         return InputBatches::create([
             'input_id' => $itemData['input_id'],
             'order_id' => $orderId,
-            'quantity_total' => round($itemData['quantity_total'], 3),
-            'quantity_remaining' => $quantityInGrams,
+            'quantity_total' => $originalQuantity,
+            'unit' => $originalUnit,
+            'quantity_remaining' => round($converionResult['converted_quantity'], 2),
+            'unit_converted' => $converionResult['standard_unit'],
             'unit_price' => round($itemData['unit_price'], 3),
             'subtotal_price' => round($itemData['quantity_total'] * $itemData['unit_price'], 3),
             'batch_number' => $this->getNextBatchNumber($itemData['input_id']),
@@ -36,16 +41,33 @@ class OrderService
         return $lastBatch ? $lastBatch->batch_number + 1 : 1;
     }
 
-    protected function convertToGrams(float $quantity, string $unit): float
+    protected function convertToStandardUnit(float $quantity, string $unit): array
     {
-        return match (strtolower($unit)) {
-            'kg' => $quantity * 1000,
-            'lb' => $quantity * 453.592,
-            'oz' => $quantity * 28.3495,
-            'l' => $quantity * 1000,
-            'un' => $quantity * 1,
-            default => $quantity
-        };
+        $unit = strtolower($unit);
+
+        // Lógica de conversión
+        if (in_array($unit, ['kg', 'g', 'lb', 'oz'])) {
+            // Unidades de MASA -> Convertir a gramos (g)
+            $converted = match ($unit) {
+                'kg' => $quantity * 1000,
+                'g' => $quantity,
+                'lb' => $quantity * 453.592,
+                'oz' => $quantity * 28.3495,
+            };
+            return ['converted_quantity' => $converted, 'standard_unit' => 'g'];
+        } elseif (in_array($unit, ['l', 'ml'])) {
+            // Unidades de VOLUMEN -> Convertir a mililitros (ml)
+            $converted = match ($unit) {
+                'l' => $quantity * 1000,
+                'ml' => $quantity,
+            };
+            return ['converted_quantity' => $converted, 'standard_unit' => 'ml'];
+        } elseif ($unit == 'un') {
+            // Unidades (piezas) -> No se convierte, queda en 'un'
+            return ['converted_quantity' => $quantity, 'standard_unit' => 'un'];
+        } else {
+            throw new \Exception("Unidad no válida: $unit");
+        }
     }
 
     public function createOrderWithBatches(array $orderData): Order

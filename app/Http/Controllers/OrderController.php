@@ -19,7 +19,8 @@ class OrderController extends BaseCrudController
         'order_date' => 'required|date',
         'items' => 'required|array|min:1',
         'items.*.input_id' => 'required|exists:input,id',
-        'items.*.quantity_total' => 'required|numeric|min:0.01',
+        'items.*.quantity_total' => 'required|integer',
+        'items.*.unit' => 'required|string|max:10',
         'items.*.unit_price' => 'required|numeric|min:0.01'
     ];
 
@@ -72,10 +73,6 @@ class OrderController extends BaseCrudController
                 $input = Input::find($item['input_id']);
                 if (!$input) {
                     throw new \Exception("El insumo con ID {$item['input_id']} no existe");
-                }
-
-                if (!in_array(strtolower($input->unit), ['kg', 'g', 'lb', 'l', 'oz', 'un'])) {
-                    throw new \Exception("Unidad no válida para el insumo: {$input->unit}. Use: kg, g, l, lb, oz, un");
                 }
             }
 

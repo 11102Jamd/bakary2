@@ -14,7 +14,6 @@ class Recipe extends Model
     protected $fillable = [
         'name',
         'yield_quantity',
-        'unit'
     ];
 
     public function recipeIngredients(): HasMany

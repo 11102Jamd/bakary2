@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('production_id')->constrained('production')->onDelete('cascade');
             $table->foreignId('product_id')->constrained('product')->onDelete('cascade');
-            $table->decimal('quantity_produced', 10, 1);
+            $table->integer('quantity_produced');
             $table->decimal('profit_margin_porcentage', 10, 1);
             $table->timestamps();
         });

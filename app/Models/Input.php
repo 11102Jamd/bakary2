@@ -16,19 +16,10 @@ class Input extends Model
 
     protected $fillable = [
         'name',
-        'unit'
+        'category'
     ];
 
     protected $dates = ['deleted_at'];
-
-    protected static function booted()
-    {
-        static::saving(function ($input) {
-            if (!in_array(strtolower($input->unit), ['kg', 'g', 'lb', 'oz', 'l','un'])) {
-                throw new \Exception("Unidad no válida. Use: kg, g, lb, oz, un");
-            }
-        });
-    }
 
     public function batches(): HasMany
     {

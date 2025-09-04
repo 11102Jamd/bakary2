@@ -103,22 +103,37 @@ class ProductionService
         ];
     }
 
-    protected function calculateBatchCost(float $gramsUsed, InputBatches $batch): float
+
+    protected function convertFromStandardUnit(float $standardAmount, string $originalUnit): float
     {
-        $unit = strtolower($batch->input->unit);
-        $conversionRates = [
-            'kg' => 1000,
-            'g' => 1,
-            'lb' => 453.592,
-            'oz' => 28.3495,
-            'l' => 1000,
-            'un' => 1,
-        ];
+        $originalUnit = strtolower($originalUnit);
 
-        $gramsPerUnit = $conversionRates[$unit] ?? 1;
-        $unitsUsed = $gramsUsed / $gramsPerUnit;
+        if (in_array($originalUnit, ['kg', 'g', 'lb', 'oz'])) {
+            return match ($originalUnit) {
+                'kg' => $standardAmount / 1000,
+                'g' => $standardAmount,
+                'lb' => $standardAmount / 453.592,
+                'oz' => $standardAmount / 28.3495,
+            };
+        } elseif (in_array($originalUnit, ['l', 'ml'])) {
+            return match ($originalUnit) {
+                'l' => $standardAmount / 1000,
+                'ml' => $standardAmount,
+            };
+        } elseif ($originalUnit == 'un') {
+            return $standardAmount;
+        } else {
+            throw new \Exception("Unidad original no válida: $originalUnit");
+        }
+    }
 
-        return $unitsUsed * $batch->unit_price;
+    protected function calculateBatchCost(float $amountUsedInStandardUnit, InputBatches $batch): float
+    {
+        $originalUnit = $batch->unit;
+
+        $originalUnitUsed = $this->convertFromStandardUnit($amountUsedInStandardUnit, $originalUnit);
+
+        return $originalUnitUsed * $batch->unit_price;
     }
 
     public function calculateRequirements(int $recipeId, float $quantityToProduce): array

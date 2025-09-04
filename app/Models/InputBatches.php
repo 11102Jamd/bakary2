@@ -17,17 +17,15 @@ class InputBatches extends Model
         'input_id',
         'order_id',
         'quantity_total',
+        'unit',
         'quantity_remaining',
+        'unit_converted',
         'unit_price',
         'subtotal_price',
         'batch_number',
-        'original_unit',
         'received_date'
     ];
 
-    protected $attributes = [
-        'original_unit' => 'g'
-    ];
     public function input(): BelongsTo
     {
         return $this->belongsTo(Input::class, 'input_id');
@@ -48,5 +46,14 @@ class InputBatches extends Model
         return $query->where('input_id', $inputId)
             ->where('quantity_remaining', '>', 0)
             ->orderBy('received_date'); // Orden FIFO
+    }
+
+    protected static function booted()
+    {
+        static::saving(function ($input) {
+            if (!in_array(strtolower($input->unit), ['kg', 'g', 'lb', 'oz', 'l','un'])) {
+                throw new \Exception("Unidad no válida. Use: kg, g, lb, oz, un");
+            }
+        });
     }
 }

@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('recipe', function (Blueprint $table) {
             $table->id();
             $table->string('name'); // Almacena el nombre de la receta
-            $table->decimal('yield_quantity'); // Almacena la cantidad original de la receta
-            $table->string('unit'); // Almacena la unidad del producto
+            $table->integer('yield_quantity'); // Almacena la cantidad original de la receta
             $table->timestamps();
         });
     }

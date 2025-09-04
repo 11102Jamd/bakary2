@@ -23,6 +23,9 @@ class UserController extends BaseCrudController
      */
     protected $validationRules = [
         'name' => 'required|string|max:50',
+        'name2' => 'required|string|max:20',
+        'surname' => 'required|string|max:20',
+        'surname2' => 'required|string|max:20',
         'email' => 'required|email|unique:users,email',
         'rol' => 'required|string|max:50',
         'password' => 'nullable|string|min:8'

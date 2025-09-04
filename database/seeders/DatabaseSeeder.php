@@ -18,6 +18,9 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'name' => 'Test User1',
+            'name2' => 'Juan',
+            'surname' => 'Munoz',
+            'surname2' => 'Devia',
             'rol' => 'Administrador',
             'email' => 'juan@example.com',
             'password' => Hash::make('12345678')
@@ -25,6 +28,9 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'name' => 'Test User2',
+            'name2' => 'prueba',
+            'surname' => 'pprueba',
+            'surname2' => 'ppruebados',
             'rol' => 'Panadero',
             'email' => 'pp@example.com',
             'password' => Hash::make('12345678')
@@ -32,6 +38,9 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'name' => 'Test User3',
+            'name2' => 'prueba',
+            'surname' => 'pruebatres',
+            'surname2' => 'pruebatres',
             'rol' => 'Cajero',
             'email' => 'cc@example.com',
             'password' => Hash::make('12345678')

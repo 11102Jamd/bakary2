@@ -12,7 +12,7 @@ class InputController extends BaseCrudController
 
     protected $validationRules = [
         'name' => 'required|string|max:255|unique:input,name',
-        'unit' => 'required|string|max:20'
+        'category' => 'required|string|max:20'
     ];
 
     public function index()
@@ -33,7 +33,7 @@ class InputController extends BaseCrudController
     {
         try {
             $this->validationRules['name'] = 'required|string|unique:input,name,' . $id;
-            return parent::update($request, $id); // ← AGREGA 'return' AQUÍ
+            return parent::update($request, $id); 
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => 'No se pudo actualizar el insumo',

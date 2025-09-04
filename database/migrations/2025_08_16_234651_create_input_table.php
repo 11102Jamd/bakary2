@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('input', function (Blueprint $table) {
             $table->id();
             $table->string('name', 30);//amacena el nombre del insumo
-            $table->string('unit', 30);// almacena la unidad en la que se reg
+            $table->string('category', 30);// almacena la unidad en la que se reg
             $table->softDeletes();
             $table->timestamps();
         });

@@ -14,7 +14,6 @@ class RecipeService
             $recipe = Recipe::create([
                 'name' => $data['name'],
                 'yield_quantity' => $data['yield_quantity'],
-                'unit' => $data['unit']
             ]);
 
             foreach ($data['ingredients'] as $ingredient) {
@@ -61,8 +60,7 @@ class RecipeService
         return DB::transaction(function () use ($recipe, $validatedData) {
             $recipe->update([
                 'name' => $validatedData['name'],
-                'yield_quantity' => $validatedData['yield_quantity'],
-                'unit' => $validatedData['unit']
+                'yield_quantity' => $validatedData['yield_quantity']
             ]);
 
             if (isset($validatedData['ingredients'])) {
