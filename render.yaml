@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: laravel-bakery-api
+    env: docker  # ← Cambiado a docker
+    plan: free
+    # buildCommand y startCommand ELIMINADOS (Dockerfile los maneja)
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        generateValue: true
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: SESSION_DRIVER
+        value: database
+
+  - type: pgsql
+    name: bakery-database
+    plan: free
+    ipAllowList: []
+    databaseName: bakery
+    user: bakery_user
