@@ -54,3 +54,4 @@ class ProductProductionService
         return round($marginPercentage, 1);
     }
 }
+

@@ -28,12 +28,10 @@ class RecipeService
         });
     }
 
-
     public function syncRecipeIngredients(Recipe $recipe, array $ingredients)
     {
         $currentIngredients = $recipe->recipeIngredients->pluck('id')->toArray();
         $newIngredients = [];
-
 
         foreach ($ingredients as $ingredientData) {
             $ingredient = RecipeIngredients::updateOrCreate(

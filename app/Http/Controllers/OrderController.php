@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Input;
 use App\Http\Controllers\crud\BaseCrudController;
-use App\Services\OrderService;
+
 use App\Models\Order;
+use App\Services\OrderService;
 use Illuminate\Http\Request;
 
 class OrderController extends BaseCrudController
@@ -34,11 +35,7 @@ class OrderController extends BaseCrudController
         try {
             $orders = $this->model::with('batches.input')
                 ->orderBy('id', 'desc')
-                ->get()
-                ->map(function ($order) {
-                    $order->order_total = $order->order_total; // Forzar cálculo si es null
-                    return $order;
-                });
+                ->get();
 
             return response()->json($orders);
         } catch (\Throwable $th) {

@@ -17,23 +17,23 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(ProductProductionService::class, function ($app) {
+        $this->app->singleton(ProductProductionService::class, function ($app) {
             return new ProductProductionService();
         });
 
-        $this->app->bind(ProductionService::class, function ($app) {
+        $this->app->singleton(ProductionService::class, function ($app) {
             return new ProductionService();
         });
-        $this->app->bind(RecipeService::class, function ($app) {
+        $this->app->singleton(RecipeService::class, function ($app) {
             return new RecipeService();
         });
-        $this->app->bind(OrderService::class, function ($app) {
+        $this->app->singleton(OrderService::class, function ($app) {
             return new OrderService();
         });
-        $this->app->bind(SaleService::class, function ($app) {
+        $this->app->singleton(SaleService::class, function ($app) {
             return new SaleService();
         });
-        $this->app->bind(PdfService::class, function ($app) {
+        $this->app->singleton(PdfService::class, function ($app) {
             return new PdfService();
         });
     }

@@ -103,7 +103,6 @@ class ProductionService
         ];
     }
 
-
     protected function convertFromStandardUnit(float $standardAmount, string $originalUnit): float
     {
         $originalUnit = strtolower($originalUnit);
@@ -206,7 +205,6 @@ class ProductionService
         ];
     }
 
-
     public function revertProduction(Production $production)
     {
         return DB::transaction(function () use ($production) {
@@ -229,3 +227,4 @@ class ProductionService
         return true;
     }
 }
+
