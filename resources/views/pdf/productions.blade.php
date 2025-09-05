@@ -70,7 +70,7 @@
 
         <table>
             <tr class="order-header">
-                <td colspan="5">
+                <td colspan="4">
                     Producción N° {{ $production->id }} -
                     Receta: {{ $production->recipe->name ?? 'Sin Receta' }} -
                     Producto: {{ $firstProductProduction->product->name ?? 'Sin producto' }} -
@@ -81,7 +81,6 @@
             <tr>
                 <th>Insumo</th>
                 <th>Cantidad Gastada</th>
-                <th>Precio Unitario</th>
                 <th>Subtotal</th>
                 <th>Lote N°</th>
             </tr>
@@ -89,19 +88,18 @@
             @foreach ($production->consumptions as $consumption)
                 <tr>
                     <td>{{ $consumption->batch->input->name ?? 'N/A' }}</td>
-                    <td>{{ $consumption->quantity_used }} g</td>
-                    <td class="text-right">${{ number_format($consumption->unit_cost ?? 0, 2) }}</td>
+                    <td>{{ $consumption->quantity_used }} {{$consumption->batch->unit_converted}}</td>
                     <td class="text-right">${{ number_format($consumption->total_cost, 2) }}</td>
                     <td>{{ $consumption->batch->batch_number ?? 'N/A' }}</td>
                 </tr>
             @endforeach
 
             <tr class="order-total">
-                <td>Precio por producto</td>
+                <td colspan="3">Precio por producto</td>
                 <td class="text-right">${{ number_format($production->price_for_product ?? 0, 2) }}</td>
             </tr>
             <tr class="order-total">
-                <td colspan="4">Total Producción:</td>
+                <td colspan="3">Total Producción:</td>
                 <td class="text-right">${{ number_format($production->total_cost, 2) }}</td>
             </tr>
         </table>
