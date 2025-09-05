@@ -102,11 +102,6 @@ Route::post('/sale/export-pdf', [SalePdfController::class, 'exportPdf']);
 
 
 
-Route::apiResource('input', InputController::class);
-Route::apiResource('order', OrderController::class);
-
-
-
 
 
 
