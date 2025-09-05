@@ -3,12 +3,12 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Services\OrderService;
-use App\services\PdfService;
-use App\Services\ProductionService;
-use App\Services\ProductProductionService;
-use App\Services\RecipeService;
-use App\Services\SaleService;
+// use App\Services\OrderService;
+// use App\services\PdfService;
+// use App\Services\ProductionService;
+// use App\Services\ProductProductionService;
+// use App\Services\RecipeService;
+// use App\Services\SaleService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,25 +17,25 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(ProductProductionService::class, function ($app) {
-            return new ProductProductionService();
-        });
+        // $this->app->singleton(ProductProductionService::class, function ($app) {
+        //     return new ProductProductionService();
+        // });
 
-        $this->app->singleton(ProductionService::class, function ($app) {
-            return new ProductionService();
-        });
-        $this->app->singleton(RecipeService::class, function ($app) {
-            return new RecipeService();
-        });
-        $this->app->singleton(OrderService::class, function ($app) {
-            return new OrderService();
-        });
-        $this->app->singleton(SaleService::class, function ($app) {
-            return new SaleService();
-        });
-        $this->app->singleton(PdfService::class, function ($app) {
-            return new PdfService();
-        });
+        // $this->app->singleton(ProductionService::class, function ($app) {
+        //     return new ProductionService();
+        // });
+        // $this->app->singleton(RecipeService::class, function ($app) {
+        //     return new RecipeService();
+        // });
+        // $this->app->singleton(OrderService::class, function ($app) {
+        //     return new OrderService();
+        // });
+        // $this->app->singleton(SaleService::class, function ($app) {
+        //     return new SaleService();
+        // });
+        // $this->app->singleton(PdfService::class, function ($app) {
+        //     return new PdfService();
+        // });
     }
 
     /**
