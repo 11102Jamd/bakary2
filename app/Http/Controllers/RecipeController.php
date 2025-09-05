@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\crud\BaseCrudController;
-use App\Models\Recipe;
 use App\Services\RecipeService;
+use App\Models\Recipe;
 use Illuminate\Http\Request;
 
 class RecipeController extends BaseCrudController

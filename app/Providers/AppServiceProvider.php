@@ -32,9 +32,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(RecipeService::class, function ($app){
             return new RecipeService();
         });
-        // $this->app->singleton(SaleService::class, function ($app){
-        //     return new SaleService();
-        // });
+        $this->app->singleton(SaleService::class, function ($app){
+            return new SaleService();
+        });
     }
 
     /**

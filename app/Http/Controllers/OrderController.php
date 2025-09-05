@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Input;
 use App\Http\Controllers\crud\BaseCrudController;
-
 use App\Models\Order;
 use App\Services\OrderService;
 use Illuminate\Http\Request;

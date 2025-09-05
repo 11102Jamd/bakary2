@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sale;
-use App\services\PdfService;
+use App\Services\PdfService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;

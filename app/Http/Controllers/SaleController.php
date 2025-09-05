@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\crud\BaseCrudController;
-use App\Models\ProductProduction;
+
 use App\Models\Sale;
 use App\Services\SaleService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class SaleController extends BaseCrudController
 {

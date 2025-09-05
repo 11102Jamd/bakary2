@@ -6,7 +6,7 @@ use App\Http\Controllers\crud\BaseCrudController;
 use App\Models\Product;
 use App\Services\ProductProductionService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Js;
+
 
 class ProductController extends BaseCrudController
 {
