@@ -19,7 +19,11 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:5173'],
+    'allowed_origins' => [
+        'http://localhost:5173',
+        'https://bakary2-front.vercel.app',
+        'https://bakary2.onrender.com'
+    ],
 
     'allowed_origins_patterns' => [],
 
