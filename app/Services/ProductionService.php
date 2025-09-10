@@ -44,8 +44,8 @@ class ProductionService
 
             // Actualizar con el costo total calculado
             $production->update([
-                'total_cost' => round($totalCost, 3),
-                'price_for_product' => round($totalCost / $quantityToProduce, 3)
+                'total_cost' => round($totalCost, 1),
+                'price_for_product' => round($totalCost / $quantityToProduce, 1)
             ]);
 
             return $production->load('consumptions.batch.input');
@@ -76,9 +76,9 @@ class ProductionService
                 'production_id' => $productionId,
                 'input_id' => $inputId,
                 'input_batches_id' => $batch->id,
-                'quantity_used' => round($consumedGrams, 3),
-                'unit_price' => round($batch->unit_price, 3),
-                'total_cost' => round($batchCost, 3)
+                'quantity_used' => round($consumedGrams, 1),
+                'unit_price' => round($batch->unit_price, 1),
+                'total_cost' => round($batchCost, 1)
             ]);
 
             $batch->decrement('quantity_remaining', $consumedGrams);
@@ -87,8 +87,8 @@ class ProductionService
 
             $batchesUsed[] = [
                 'batch_id' => $batch->id,
-                'grams_used' => round($consumedGrams, 3),
-                'cost' => round($batchCost, 3)
+                'grams_used' => round($consumedGrams, 1),
+                'cost' => round($batchCost, 1)
             ];
         }
 
@@ -98,7 +98,7 @@ class ProductionService
 
         return [
             'total_grams_used' => $requiredGrams - $remaining,
-            'total_cost' => round($totalCost, 3),
+            'total_cost' => round($totalCost, 1),
             'batches' => $batchesUsed
         ];
     }

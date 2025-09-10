@@ -14,7 +14,8 @@ class RecipeIngredients extends Model
     protected $fillable = [
         'recipe_id',
         'input_id',
-        'quantity_required'
+        'quantity_required',
+        'unit_used'
     ];
 
     public function recipe(): BelongsTo

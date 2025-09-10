@@ -22,7 +22,7 @@ class Sale extends Model
         'sale_total' => 0
     ];
 
-
+    
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

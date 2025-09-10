@@ -20,7 +20,8 @@ class RecipeService
                 RecipeIngredients::create([
                     'recipe_id' => $recipe->id,
                     'input_id' => $ingredient['input_id'],
-                    'quantity_required' => $ingredient['quantity_required']
+                    'quantity_required' => $ingredient['quantity_required'],
+                    'unit_used' => $ingredient['unit_used']
                 ]);
             }
 
@@ -40,7 +41,8 @@ class RecipeService
                     'input_id' => $ingredientData['input_id']
                 ],
                 [
-                    'quantity_required' => $ingredientData['quantity_required']
+                    'quantity_required' => $ingredientData['quantity_required'],
+                    'unit_used' => $ingredientData['unit_used']
                 ]
             );
 

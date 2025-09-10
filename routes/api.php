@@ -12,10 +12,13 @@ use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SalePdfController;
 use App\Http\Controllers\UserController;
+use App\Models\Input;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-
+/**
+ * Rutas de Acceso - login y reset-password
+ */
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
@@ -47,6 +50,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::patch('input/{id}/enable', [InputController::class, 'enable']);
         Route::get('input/{input}/batches', [InputController::class, 'batches']);
         Route::apiResource('recipe', RecipeController::class);
+        Route::patch('/recipe/{id}/disable', [RecipeController::class, 'disable']);
         Route::apiResource('product', ProductController::class);
         Route::patch('product/{id}/disable', [ProductController::class, 'disable']);
         Route::patch('product/{id}/enable', [ProductController::class, 'enable']);
@@ -72,7 +76,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
      */
     Route::middleware(['is_cashier'])->group(function () {
         Route::apiResource('order', OrderController::class)->only(['index', 'show', 'store']);
-        Route::apiResource('input', InputController::class)->only(['index', 'show']);
+        //probar input con cashier
         Route::apiResource('product', ProductController::class)->only(['index', 'show']);
         Route::apiResource('sale', SaleController::class)->except(['index', 'show', 'store']);
     });
@@ -86,13 +90,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::apiResource('recipe', RecipeController::class)->only(['index', 'show', 'store', 'update']);
         Route::prefix('production')->group(function () {
             Route::get('/', [ProductionController::class, 'index']);
+            Route::get('/{id}', [ProductionController::class, 'show']);
             // Pre-calcular requerimientos (POST) - No afecta la base de datos
             Route::post('/calculate-requirements', [ProductionController::class, 'calculateRequirements']);
             Route::post('/', [ProductionController::class, 'executeProduction']);
             Route::delete('/{id}', [ProductionController::class, 'destroy']);
         });
     });
-
+    Route::apiResource('input', InputController::class)->only(['index','show']);
     Route::apiResource('product', ProductController::class)->only(['index', 'show']);
 });
 

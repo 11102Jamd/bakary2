@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name'); // Almacena el nombre de la receta
             $table->integer('yield_quantity'); // Almacena la cantidad original de la receta
+            $table->softDeletes();
             $table->timestamps();
         });
     }

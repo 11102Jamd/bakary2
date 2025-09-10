@@ -82,6 +82,12 @@ class AuthController extends Controller
                 ], 404);
             }
 
+            if (Hash::check($request->new_password, $user->password)) {
+                return response()->json([
+                    'message' => 'error la contraseña no puede ser igual a la anterior'
+                ], 422);
+            }
+
             $user->password = Hash::make($request->new_password);
             $user->save();
 

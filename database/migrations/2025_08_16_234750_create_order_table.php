@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('supplier_name');//almacena el nombre del proveedor
             $table->date('order_date');//alamacenar la fecha de la compra
-            $table->decimal('order_total', 10,3);//almacena el total de la compra
+            $table->decimal('order_total', 10,1);//almacena el total de la compra
             $table->timestamps();
         });
     }

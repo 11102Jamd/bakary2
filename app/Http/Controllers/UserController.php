@@ -49,11 +49,18 @@ class UserController extends BaseCrudController
     }
 
 
+    /**
+     * desabilita un usuario en la base de datos pero no lo elimina
+     * con el fin dee que si no lo elimina no se eliminen sus registros en cascada
+     *
+     * @param int $id ID del usuario a inhabilitar.
+     * @return \Illuminate\Http\JsonResponse Usuario inhabilitado o error de validación.
+     */
     public function disable($id)
     {
         try {
             $user = $this->model::findOrFail($id);
-            $user->delete();
+            $user->delete();//Ejecuta softdelete y no un delete como tal
             return response()->json([
                 'message' => 'usuario inhabilitado temporalmete',
             ], 200);

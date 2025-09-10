@@ -17,7 +17,8 @@ class RecipeController extends BaseCrudController
         'yield_quantity' => 'required|numeric|min:0.001',
         'ingredients' => 'required|array|min:1',
         'ingredients.*.input_id' => 'required|exists:input,id',
-        'ingredients.*.quantity_required' => 'required|numeric|min:0.001'
+        'ingredients.*.quantity_required' => 'required|numeric|min:0.001',
+        'ingredients.*.unit_used' => 'required|string|max:10'
     ];
 
     public function __construct(RecipeService $recipeService)
@@ -79,6 +80,22 @@ class RecipeController extends BaseCrudController
                 'error' => 'Error de validación',
                 'message' => $e->getMessage()
             ], 422);
+        }
+    }
+
+    public function disable($id)
+    {
+        try {
+            $recipe = $this->model::findOrFail($id);
+            $recipe->delete();//Ejecuta softdelete y no un delete como tal
+            return response()->json([
+                'message' => 'receta inhabilitado temporalmete',
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => 'error no sep udo encontrar el usuario con ese registro',
+                'message' => $th->getMessage()
+            ], 404);
         }
     }
 }

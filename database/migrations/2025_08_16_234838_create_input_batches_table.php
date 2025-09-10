@@ -17,10 +17,10 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained('order')->onDelete('cascade');
             $table->integer('quantity_total'); //almacena la cantidad inicial del insumo
             $table->string('unit', 30); // Almacena [kg,l,lb,un,oz,g,ml]
-            $table->decimal('quantity_remaining', 10, 3); // lamacena la cantidad del inumo y su conversion a g
+            $table->decimal('quantity_remaining', 10, 1); // lamacena la cantidad del inumo y su conversion a g
             $table->string('unit_converted', 30); //Almacena g,mlo un nada mas
-            $table->decimal('unit_price', 10, 3); // almacena el precio unitario del inusmo
-            $table->decimal('subtotal_price', 10, 3); // almacena el susbtotal unit_price * quantity_total
+            $table->decimal('unit_price', 10, 1); // almacena el precio unitario del inusmo
+            $table->decimal('subtotal_price', 10, 1); // almacena el susbtotal unit_price * quantity_total
             $table->integer('batch_number'); // Almacena el numero del lote
             $table->date('received_date')->useCurrent(); // Almacena la fecha recivida del insumo
             $table->timestamps();
