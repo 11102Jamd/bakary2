@@ -103,14 +103,14 @@ class OrderService
         return DB::transaction(function () use ($orderData) {
             // Calcular total de la orden
             $orderTotal = collect($orderData['items'])->sum(function ($item) {
-                return round($item['quantity_total'] * $item['unit_price'], 3);
+                return round($item['quantity_total'] * $item['unit_price'], 1);
             });
 
             // Crear la orden principal con el total
             $order = Order::create([
                 'supplier_name' => $orderData['supplier_name'],
                 'order_date' => $orderData['order_date'],
-                'order_total' => round($orderTotal, 3)
+                'order_total' => round($orderTotal, 1)
             ]);
 
             // Procesar cada item del pedido
