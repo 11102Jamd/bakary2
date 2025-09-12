@@ -104,15 +104,15 @@
                 <tr>
                     <td>{{ $batch->input->name }}</td>
                     <td>{{ $batch->quantity_total }} {{ $batch->unit }}</td>
-                    <td>${{ number_format($batch->unit_price, 2) }}</td>
-                    <td>${{ number_format($batch->subtotal_price, 2) }}</td>
+                    <td>${{ number_format($batch->unit_price, 0) }}</td>
+                    <td>${{ number_format($batch->subtotal_price, 0) }}</td>
                     <td>{{ $batch->batch_number ?? 'N/A' }}</td>
                 </tr>
             @endforeach
 
             <tr class="order-total">
                 <td colspan="4">Total Compra: </td>
-                <td>${{ number_format($order->order_total, 2) }}</td>
+                <td>${{ number_format($order->order_total, 0) }}</td>
             </tr>
         </table>
 
@@ -122,7 +122,7 @@
     @endforeach
 
     <div class="grand-total">
-        Total de las Compras Realizadas: ${{ number_format($totalOrders, 2) }}
+        Total de las Compras Realizadas: ${{ number_format($totalOrders, 0) }}
     </div>
 </body>
 

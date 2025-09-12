@@ -83,14 +83,14 @@
                 <tr>
                     <td>{{ $salesProduct->product->name ?? 'N/A' }}</td>
                     <td>{{ $salesProduct->quantity_requested }} unidades</td>
-                    <td class="text-right">${{ number_format($salesProduct->product->unit_price ?? 0, 2) }}</td>
-                    <td class="text-right">${{ number_format($salesProduct->subtotal_price, 2) }}</td>
+                    <td class="text-right">${{ number_format($salesProduct->product->unit_price ?? 0, 0) }}</td>
+                    <td class="text-right">${{ number_format($salesProduct->subtotal_price, 0) }}</td>
                 </tr>
             @endforeach
 
             <tr class="order-total">
                 <td colspan="3">Total Venta:</td>
-                <td class="text-right">${{ number_format($sale->sale_total, 2) }}</td>
+                <td class="text-right">${{ number_format($sale->sale_total, 0) }}</td>
             </tr>
         </table>
 
@@ -100,7 +100,7 @@
     @endforeach
 
     <div class="grand-total">
-        Total de las Ventas: ${{ number_format($totalSales, 2) }}
+        Total de las Ventas: ${{ number_format($totalSales, 0) }}
     </div>
 </body>
 </html>

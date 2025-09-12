@@ -86,6 +86,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
      */
     Route::middleware(['is_baker'])->group(function () {
         Route::apiResource('product', ProductController::class)->only(['index', 'show', 'store']);
+        Route::post('/products/link-production', [ProductController::class, 'linkProductionToProduct']);
         Route::apiResource('input', InputController::class)->only(['index', 'show', 'store', 'update']);
         Route::apiResource('recipe', RecipeController::class)->only(['index', 'show', 'store', 'update']);
         Route::prefix('production')->group(function () {
@@ -97,7 +98,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::delete('/{id}', [ProductionController::class, 'destroy']);
         });
     });
-    Route::apiResource('input', InputController::class)->only(['index','show']);
+    Route::apiResource('input', InputController::class)->only(['index', 'show']);
     Route::apiResource('product', ProductController::class)->only(['index', 'show']);
 });
 
