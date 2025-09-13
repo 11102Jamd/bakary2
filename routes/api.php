@@ -100,6 +100,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
     Route::apiResource('input', InputController::class)->only(['index', 'show']);
     Route::apiResource('product', ProductController::class)->only(['index', 'show']);
+    Route::get('/sale', [SaleController::class, 'index']);
 });
 
 Route::post('/order/export-pdf', [OrderPdfController::class, 'exportPdf']);
