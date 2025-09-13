@@ -27,6 +27,11 @@ class OrderPdfTest extends TestCase
      */
     use DatabaseTransactions;
 
+    /**
+     *
+     *
+     *
+     */
     #[Test]
     public function export_pdf_with_dates()
     {
@@ -68,14 +73,24 @@ class OrderPdfTest extends TestCase
         $response->assertHeader('Content-Type', 'application/pdf');
     }
 
+    /**
+     *
+     *
+     *
+     */
     #[Test]
     public function if_params_not_exits_return_error()
     {
         $response = $this->postJson('/api/order/export-pdf', []);
 
-        $response->assertStatus(500);
+        $response->assertStatus(422);
     }
 
+    /**
+     *
+     *
+     *
+     */
     #[Test]
     public function order_not_found_in_range_dates()
     {
@@ -93,6 +108,11 @@ class OrderPdfTest extends TestCase
         ]);
     }
 
+    /**
+     *
+     *
+     *
+     */
     #[Test]
     public function verifica_datos_no_persisten()
     {
@@ -109,6 +129,11 @@ class OrderPdfTest extends TestCase
         $this->assertTrue(true);
     }
 
+    /**
+     *
+     *
+     *
+     */
     #[Test]
     public function debug_void_response()
     {
@@ -128,15 +153,11 @@ class OrderPdfTest extends TestCase
         $this->assertTrue(true);
     }
 
-    #[Test]
-    public function export_pdf_without_params()
-    {
-        $response = $this->postJson('/api/order/export-pdf', []);
-
-        // El controlador podría devolver 500, 422 o 400 - ajustamos según el comportamiento real
-        $response->assertStatus(500); // Cambiado a 500 basado en el comportamiento real
-    }
-
+    /**
+     *
+     *
+     *
+     */
     #[Test]
     public function export_pdf_with_mayor_start_date()
     {
@@ -147,7 +168,6 @@ class OrderPdfTest extends TestCase
 
         $response = $this->postJson('/api/order/export-pdf', $requestData);
 
-        // convertir status a true/false
-        $response->assertStatus(500);
+        $response->assertStatus(422);
     }
 }

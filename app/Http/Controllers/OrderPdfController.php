@@ -7,6 +7,7 @@ use App\Services\PdfService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class OrderPdfController extends Controller
 {
@@ -57,6 +58,11 @@ class OrderPdfController extends Controller
             return response($pdf->output(), 200)
                 ->header('Content-Type', 'application/pdf')
                 ->header('Content-Disposition', 'attachment; filename="reporte-compras.pdf"');
+        } catch (ValidationException $e) {
+            return response()->json([
+                'error' => 'Error en las reglas de validacion.',
+                'details' => $e->getMessage()
+            ], 422);
         } catch (\Throwable $th) {
             Log::error('Error al generar PDF:', [
                 'message' => $th->getMessage(),

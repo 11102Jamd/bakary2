@@ -7,6 +7,7 @@ use App\Services\PdfService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class ProductionPdfController extends Controller
 {
@@ -29,7 +30,7 @@ class ProductionPdfController extends Controller
             $startDate = Carbon::parse($request->start_date)->startOfDay();
             $endDate = Carbon::parse($request->end_date)->endOfDay();
 
-            $productions = Production::with(['consumptions.batch.input','productProduction.product','recipe'])
+            $productions = Production::with(['consumptions.batch.input', 'productProduction.product', 'recipe'])
                 ->whereBetween('production_date', [$startDate, $endDate])
                 ->orderBy('production_date', 'asc')
                 ->get();
@@ -58,7 +59,11 @@ class ProductionPdfController extends Controller
                 ->header('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
                 ->header('Pragma', 'no-cache')
                 ->header('Expires', '0');
-
+        } catch (ValidationException $e) {
+            return response()->json([
+                'error' => 'Error en las reglas de validacion.',
+                'details' => $e->getMessage()
+            ], 422);
         } catch (\Throwable $th) {
             Log::error('Error al generar PDF:', [
                 'message' => $th->getMessage(),
