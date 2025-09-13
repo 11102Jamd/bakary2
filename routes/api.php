@@ -78,7 +78,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::apiResource('order', OrderController::class)->only(['index', 'show', 'store']);
         //probar input con cashier
         Route::apiResource('product', ProductController::class)->only(['index', 'show']);
-        Route::apiResource('sale', SaleController::class)->except(['index', 'show', 'store']);
+        Route::apiResource('sale', SaleController::class)->only(['index', 'show', 'store']);
     });
 
     /**
@@ -100,7 +100,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
     Route::apiResource('input', InputController::class)->only(['index', 'show']);
     Route::apiResource('product', ProductController::class)->only(['index', 'show']);
-    Route::get('/sale', [SaleController::class, 'index']);
 });
 
 Route::post('/order/export-pdf', [OrderPdfController::class, 'exportPdf']);
