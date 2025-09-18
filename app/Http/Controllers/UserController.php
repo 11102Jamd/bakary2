@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\crud\BaseCrudController;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends BaseCrudController
 {
@@ -60,7 +61,14 @@ class UserController extends BaseCrudController
     {
         try {
             $user = $this->model::findOrFail($id);
-            $user->delete();//Ejecuta softdelete y no un delete como tal
+
+            if (Auth::id() == $id) {
+                return response()->json([
+                    'error' => 'No puedes inhabilitarte a ti mismo'
+                ], 403);
+            }
+
+            $user->delete(); //Ejecuta softdelete y no un delete como tal
             return response()->json([
                 'message' => 'usuario inhabilitado temporalmete',
             ], 200);
